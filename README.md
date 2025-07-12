@@ -87,4 +87,4 @@ Follow the prompts to:
 3. Enter instruction prompt - e.g. replace sofa
 4. Wait for generation and automatic image opening
 
-Generated images are saved as PNG files with timestamps in the current directory. The script current is set to generate three images to give a few output variants.
+Generated images are saved as PNG files with timestamps in the current directory. The script currently generates three images to give a few output variants.
