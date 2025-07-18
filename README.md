@@ -17,6 +17,7 @@ A demo project showcasing the Strands AI agent framework.
 - **multi_agent_as_tools_researcher.py** - A demo of a executive assistant agent that helps to prepare a travel itinerary. This demonstrates how the agent can use two other agents (research analyst and travel advisor) as tools.
 - **multi_agent_flow_researcher.py** - A demo of a multi-agent flow that researches the web, verifies the results, and generates a report
 - **multi_agent_swarm_researcher.py** - A demo of the Strands swarm feature to coordinate multiple agents (researchers, writers, analysts) to work a market research team.
+- **A2A** folder - Contains a sample A2A server providing a calculator agent (a2a_agent_calculator.py) and a sample A2A client (a2a_client_async_calculator.py)
 
 ## Installation
 
