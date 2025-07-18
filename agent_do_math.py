@@ -2,7 +2,16 @@ from strands import Agent
 from strands_tools import calculator
 import random
 
-agent = Agent(tools=[calculator])
+# Define Model to use. Strands 1.0 defaults to us.anthropic.claude-sonnet-4-20250514-v1:0
+#MODEL_ID="us.anthropic.claude-sonnet-4-20250514-v1:0"
+MODEL_ID="us.anthropic.claude-3-7-sonnet-20250219-v1:0"
+#MODEL_ID="us.anthropic.claude-3-5-sonnet-20241022-v2:0"
+
+agent = Agent(
+    model=MODEL_ID,
+    tools=[calculator]
+)
+print(f"Model: {agent.model.config}\n")
 print("Enter an empty response to generate a random question.")
 user_prompt = input("Enter your math question: ")
 if not user_prompt.strip():

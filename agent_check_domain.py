@@ -5,6 +5,11 @@ from strands_tools import http_request
 from mcp import stdio_client, StdioServerParameters
 import random
 
+# Define Model to use. Strands 1.0 defaults to us.anthropic.claude-sonnet-4-20250514-v1:0
+#MODEL_ID="us.anthropic.claude-sonnet-4-20250514-v1:0"
+MODEL_ID="us.anthropic.claude-3-7-sonnet-20250219-v1:0"
+#MODEL_ID="us.anthropic.claude-3-5-sonnet-20241022-v2:0"
+
 # Define a naming-focused system prompt
 NAMING_SYSTEM_PROMPT = """
 You are an assistant that helps to name open source projects.
@@ -33,8 +38,10 @@ with domain_name_tools:
     #print(f"Tools: {tools}")
     naming_agent = Agent(
         system_prompt=NAMING_SYSTEM_PROMPT,
+        model=MODEL_ID,
         tools=tools
     )
+    print(f"Model: {naming_agent.model.config}\n")
     print("Enter an empty response to generate a random objective.")
     user_prompt = input("Enter your desired objective for your project name:")
     if not user_prompt.strip():

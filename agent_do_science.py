@@ -2,15 +2,16 @@ import logging
 from strands import Agent
 import random
 
-# Enable debug logging (optional)
-# logging.getLogger("strands").setLevel(logging.DEBUG)
-# logging.basicConfig(
-#     format="%(levelname)s | %(name)s | %(message)s",
-#     handlers=[logging.StreamHandler()]
-# )
+# Define Model to use. Strands 1.0 defaults to us.anthropic.claude-sonnet-4-20250514-v1:0
+#MODEL_ID="us.anthropic.claude-sonnet-4-20250514-v1:0"
+MODEL_ID="us.anthropic.claude-3-7-sonnet-20250219-v1:0"
+#MODEL_ID="us.anthropic.claude-3-5-sonnet-20241022-v2:0"
+
+logging.getLogger("strands").setLevel(logging.DEBUG)
 
 # Create the Subject Expert agent
 subject_expert = Agent(
+    model=MODEL_ID,
     system_prompt="""You are a Computer Science Subject Expert specializing
     in explaining technical concepts clearly and concisely. Your expertise
     covers programming languages, data structures, algorithms, computer
@@ -27,6 +28,7 @@ subject_expert = Agent(
     science fundamentals.
     """
 )
+print(f"Model: {subject_expert.model.config}\n")
 
 def interactive_session():
     print("Computer Science Subject Expert Agent (type 'exit' to quit)")

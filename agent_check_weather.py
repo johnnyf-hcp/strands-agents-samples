@@ -2,6 +2,12 @@
 from strands import Agent
 from strands_tools import http_request
 import random
+import os
+
+# Define Model to use. Strands 1.0 defaults to us.anthropic.claude-sonnet-4-20250514-v1:0
+#MODEL_ID="us.anthropic.claude-sonnet-4-20250514-v1:0"
+MODEL_ID="us.anthropic.claude-3-7-sonnet-20250219-v1:0"
+#MODEL_ID="us.anthropic.claude-3-5-sonnet-20241022-v2:0"
 
 # Define a weather-focused system prompt
 WEATHER_SYSTEM_PROMPT = """You are a weather assistant with HTTP capabilities. You can:
@@ -22,19 +28,23 @@ When displaying responses:
 
 Always explain the weather conditions clearly and provide context for the forecast.
 """
+# Set environment variable to be able to see instructions sent to handoff_to_user tool
+os.environ["STRANDS_TOOL_CONSOLE_MODE"] = "enabled"
 
 # Create an agent with HTTP capabilities
 agent = Agent(
     system_prompt=WEATHER_SYSTEM_PROMPT,
+    model=MODEL_ID,
     tools=[http_request],  # Explicitly enable http_request tool
 )
+print(f"Model: {agent.model.config}\n")
 print("Enter an empty response to generate a random US city.")
 user_prompt = input("Enter your weather question for US Cities: ")
 if not user_prompt.strip():
     cities = [
         "Seattle",
-        "Maimi",
-        "New York?",
+        "Maimi, Florida",
+        "New York",
         "Chicago",
         "Los Angeles",
         "Austin"
