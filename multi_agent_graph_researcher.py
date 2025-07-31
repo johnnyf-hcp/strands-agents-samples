@@ -1,7 +1,7 @@
 import logging  
 import random
 from strands import Agent 
-from strands.multiagent import Swarm 
+from strands.multiagent import GraphBuilder, Swarm
 from strands_tools import mem0_memory, calculator, file_write 
 
 # Define Model to use. Strands 1.0 defaults to us.anthropic.claude-sonnet-4-20250514-v1:0
@@ -29,12 +29,26 @@ if not user_prompt.strip():
 print(f"Asked Question: {user_prompt}")
 
 
-researcher = Agent( 
-    name="researcher", 
-    model=MODEL_ID,
-    system_prompt="You research topics thoroughly using your memory and built-in knowledge", 
-    tools=[mem0_memory] 
-) 
+researcher_agents = [
+    Agent( 
+        name="medical_researcher", 
+        model=MODEL_ID,
+        system_prompt="You research medical topics thoroughly using your memory and built-in knowledge", 
+        tools=[mem0_memory]
+    ),
+    Agent( 
+        name="technology_researcher", 
+        model=MODEL_ID,
+        system_prompt="You research technology topics thoroughly using your memory and built-in knowledge", 
+        tools=[mem0_memory]
+    ),
+    Agent( 
+        name="economic_researcher", 
+        model=MODEL_ID,
+        system_prompt="You research economic topics thoroughly using your memory and built-in knowledge", 
+        tools=[mem0_memory]
+    )
+]
 
 analyst = Agent( 
     name="analyst", 
@@ -43,6 +57,13 @@ analyst = Agent(
     tools=[calculator, mem0_memory] 
 )
 
+checker = Agent( 
+    name="checker", 
+    model=MODEL_ID,
+    system_prompt="You fact check data and reports using your memory and built-in knowledge", 
+    tools=[mem0_memory] 
+) 
+
 writer = Agent( 
     name="writer", 
     model=MODEL_ID,
@@ -50,6 +71,33 @@ writer = Agent(
     tools=[file_write, mem0_memory] 
 ) 
 
-# Swarm automatically coordinates agents 
-market_research_team = Swarm([researcher, analyst, writer]) 
-result = market_research_team(user_prompt)
+# Create a swarm of researcher agents
+research_swarm = Swarm(researcher_agents)
+
+# Build the graph
+builder = GraphBuilder()
+
+# Add nodes
+builder.add_node(research_swarm, "research")
+builder.add_node(analyst, "analysis")
+builder.add_node(checker, "fact_check")
+builder.add_node(writer, "report")
+
+# Add edges (dependencies)
+builder.add_edge("research", "analysis")
+builder.add_edge("research", "fact_check")
+builder.add_edge("analysis", "report")
+builder.add_edge("fact_check", "report")
+
+# Set entry points (optional - will be auto-detected if not specified)
+builder.set_entry_point("research")
+
+# Build the graph
+graph = builder.build()
+
+# Execute the graph on a task
+result = graph(user_prompt)
+
+# Access the results
+print(f"\nStatus: {result.status}")
+print(f"Execution order: {[node.node_id for node in result.execution_order]}")

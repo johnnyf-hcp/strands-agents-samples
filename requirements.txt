@@ -1,4 +1,6 @@
 strands-agents
 strands-agents[a2a]
 strands-agents-tools
+strands-agents-tools[mem0_memory]
 mcp
+faiss-cpu 
